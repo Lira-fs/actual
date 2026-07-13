@@ -34,7 +34,8 @@ export const darkThemeOptions = Object.entries({
 }).map(([key, { name }]) => [key, name] as [DarkTheme, string]);
 
 export function useTheme() {
-  const [theme = 'auto', setThemePref] = useGlobalPref('theme');
+  // Default to the light (Mobills) theme instead of following the system.
+  const [theme = 'light', setThemePref] = useGlobalPref('theme');
   return [theme, setThemePref] as const;
 }
 

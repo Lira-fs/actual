@@ -1,4 +1,16 @@
 :root {
+  /* Paleta Mobills — azul royal usado como cor de marca no tema claro */
+  --mobills-blue50: #eef2ff;
+  --mobills-blue100: #dfe7ff;
+  --mobills-blue200: #b9c8ff;
+  --mobills-blue300: #8ba1ff;
+  --mobills-blue400: #5c7cfe;
+  --mobills-blue500: #3d5afe;
+  --mobills-blue600: #2a44e8;
+  --mobills-blue700: #1f35c4;
+  --mobills-blue800: #16279b;
+  --mobills-blue900: #101c6e;
+
   --color-pageBackground: var(--palette-navy100);
   --color-pageBackgroundModalActive: var(--palette-navy200);
   --color-pageBackgroundTopLeft: var(--palette-navy100);
@@ -10,12 +22,12 @@
   --color-pageTextLight: var(--palette-navy500);
   --color-pageTextSubdued: var(--palette-navy300);
   --color-pageTextDark: var(--palette-navy800);
-  --color-pageTextPositive: var(--palette-purple600);
+  --color-pageTextPositive: var(--mobills-blue600);
   --color-pageTextLink: var(--palette-blue600);
   --color-pageTextLinkLight: var(--palette-blue300);
 
   --color-cardBackground: var(--palette-white);
-  --color-cardBorder: var(--palette-purple700);
+  --color-cardBorder: var(--mobills-blue700);
   --color-cardShadow: var(--palette-navy700);
 
   --color-tableBackground: var(--palette-white);
@@ -31,8 +43,8 @@
   --color-tableHeaderText: var(--palette-navy600);
   --color-tableHeaderBackground: var(--palette-white);
   --color-tableBorder: var(--palette-navy100);
-  --color-tableBorderSelected: var(--palette-purple500);
-  --color-tableBorderHover: var(--palette-purple400);
+  --color-tableBorderSelected: var(--mobills-blue500);
+  --color-tableBorderHover: var(--mobills-blue500);
   --color-tableBorderSeparator: var(--palette-navy400);
   --color-tableRowBackgroundHighlight: var(--palette-blue150);
   --color-tableRowBackgroundHighlightText: var(--palette-navy700);
@@ -52,15 +64,15 @@
   --color-toBudgetZero: var(--color-numberPositive);
   --color-toBudgetNegative: var(--color-budgetNumberNegative);
 
-  --color-sidebarBackground: var(--palette-navy900);
+  --color-sidebarBackground: var(--mobills-blue900);
   --color-sidebarItemBackgroundPending: var(--palette-orange200);
   --color-sidebarItemBackgroundPositive: var(--palette-green500);
   --color-sidebarItemBackgroundFailed: var(--palette-red300);
-  --color-sidebarItemBackgroundHover: var(--palette-navy800);
-  --color-sidebarItemAccentSelected: var(--palette-purple200);
+  --color-sidebarItemBackgroundHover: var(--mobills-blue800);
+  --color-sidebarItemAccentSelected: var(--mobills-blue200);
   --color-sidebarItemText: var(--palette-navy150);
   --color-sidebarItemTextUpdated: var(--color-sidebarItemText);
-  --color-sidebarItemTextSelected: var(--palette-purple200);
+  --color-sidebarItemTextSelected: var(--mobills-blue200);
   --color-sidebarBudgetName: var(--palette-navy150);
 
   --color-menuBackground: var(--palette-white);
@@ -68,10 +80,10 @@
   --color-menuItemBackgroundHover: var(--palette-navy100);
   --color-menuItemText: var(--palette-navy900);
   --color-menuItemTextHover: var(--color-menuItemText);
-  --color-menuItemTextSelected: var(--palette-purple300);
+  --color-menuItemTextSelected: var(--mobills-blue400);
   --color-menuItemTextHeader: var(--palette-navy400);
   --color-menuBorder: var(--palette-navy100);
-  --color-menuBorderHover: var(--palette-purple100);
+  --color-menuBorderHover: var(--mobills-blue100);
   --color-menuKeybindingText: var(--palette-navy400);
   --color-menuAutoCompleteBackground: var(--palette-navy900);
   --color-menuAutoCompleteBackgroundHover: var(--palette-navy600);
@@ -83,24 +95,24 @@
 
   --color-modalBackground: var(--palette-white);
   --color-modalBorder: var(--palette-white);
-  --color-mobileHeaderBackground: var(--palette-purple400);
+  --color-mobileHeaderBackground: var(--mobills-blue500);
   --color-mobileHeaderText: var(--palette-navy50);
   --color-mobileHeaderTextSubdued: var(--palette-gray200);
   --color-mobileHeaderTextHover: rgba(200, 200, 200, 0.15);
   --color-mobilePageBackground: var(--palette-navy50);
   --color-mobileNavBackground: var(--palette-white);
   --color-mobileNavItem: var(--palette-gray300);
-  --color-mobileNavItemSelected: var(--palette-purple500);
+  --color-mobileNavItemSelected: var(--mobills-blue500);
   --color-mobileAccountShadow: var(--palette-navy300);
   --color-mobileAccountText: var(--palette-blue800);
-  --color-mobileTransactionSelected: var(--palette-purple500);
+  --color-mobileTransactionSelected: var(--mobills-blue500);
 
   --color-mobileViewTheme: var(--color-mobileHeaderBackground);
-  --color-mobileConfigServerViewTheme: var(--palette-purple500);
+  --color-mobileConfigServerViewTheme: var(--mobills-blue500);
 
-  --color-markdownNormal: var(--palette-purple150);
-  --color-markdownDark: var(--palette-purple400);
-  --color-markdownLight: var(--palette-purple100);
+  --color-markdownNormal: var(--mobills-blue200);
+  --color-markdownDark: var(--mobills-blue500);
+  --color-markdownLight: var(--mobills-blue100);
 
   --color-buttonMenuText: var(--palette-navy100);
   --color-buttonMenuTextHover: var(--palette-navy50);
@@ -115,8 +127,8 @@
 
   --color-buttonPrimaryText: var(--palette-white);
   --color-buttonPrimaryTextHover: var(--color-buttonPrimaryText);
-  --color-buttonPrimaryBackground: var(--palette-purple500);
-  --color-buttonPrimaryBackgroundHover: var(--palette-purple300);
+  --color-buttonPrimaryBackground: var(--mobills-blue500);
+  --color-buttonPrimaryBackgroundHover: var(--mobills-blue400);
   --color-buttonPrimaryBorder: var(--color-buttonPrimaryBackground);
   --color-buttonPrimaryShadow: rgba(0, 0, 0, 0.3);
   --color-buttonPrimaryDisabledText: var(--palette-white);
@@ -170,42 +182,42 @@
   --color-errorTextDarker: var(--palette-red900);
   --color-errorTextMenu: var(--palette-red200);
   --color-errorBorder: var(--palette-red500);
-  --color-upcomingBackground: var(--palette-purple100);
-  --color-upcomingText: var(--palette-purple700);
-  --color-upcomingBorder: var(--palette-purple500);
+  --color-upcomingBackground: var(--mobills-blue100);
+  --color-upcomingText: var(--mobills-blue700);
+  --color-upcomingBorder: var(--mobills-blue500);
 
   --color-formLabelText: var(--palette-blue600);
   --color-formLabelBackground: var(--palette-blue200);
   --color-formInputBackground: var(--palette-navy50);
   --color-formInputBackgroundSelected: var(--palette-white);
-  --color-formInputBackgroundSelection: var(--palette-purple500);
+  --color-formInputBackgroundSelection: var(--mobills-blue500);
   --color-formInputBorder: var(--palette-navy150);
   --color-formInputTextReadOnlySelection: var(--palette-navy50);
-  --color-formInputBorderSelected: var(--palette-purple500);
+  --color-formInputBorderSelected: var(--mobills-blue500);
   --color-formInputText: var(--palette-navy900);
   --color-formInputTextSelected: var(--palette-navy50);
   --color-formInputTextPlaceholder: var(--palette-navy300);
   --color-formInputTextPlaceholderSelected: var(--palette-navy200);
   --color-formInputTextSelection: var(--palette-navy100);
-  --color-formInputShadowSelected: var(--palette-purple300);
-  --color-formInputTextHighlight: var(--palette-purple200);
+  --color-formInputShadowSelected: var(--mobills-blue400);
+  --color-formInputTextHighlight: var(--mobills-blue200);
   --color-checkboxText: var(--color-tableBackground);
   --color-checkboxBackgroundSelected: var(--palette-blue500);
   --color-checkboxBorderSelected: var(--palette-blue500);
   --color-checkboxShadowSelected: var(--palette-blue300);
   --color-checkboxToggleBackground: var(--palette-gray400);
-  --color-checkboxToggleBackgroundSelected: var(--palette-purple600);
+  --color-checkboxToggleBackgroundSelected: var(--mobills-blue600);
   --color-checkboxToggleDisabled: var(--palette-gray200);
 
   --color-pillBackground: var(--palette-navy150);
   --color-pillBackgroundLight: var(--palette-navy50);
   --color-pillText: var(--palette-navy800);
-  --color-pillTextHighlighted: var(--palette-purple600);
+  --color-pillTextHighlighted: var(--mobills-blue600);
   --color-pillBorder: var(--palette-navy150);
   --color-pillBorderDark: var(--palette-navy300);
   --color-pillBackgroundSelected: var(--palette-blue150);
   --color-pillTextSelected: var(--palette-blue900);
-  --color-pillBorderSelected: var(--palette-purple500);
+  --color-pillBorderSelected: var(--mobills-blue500);
   --color-pillTextSubdued: var(--palette-navy200);
 
   --color-reportsRed: var(--palette-red300);
@@ -219,9 +231,9 @@
   --color-reportsNumberNeutral: var(--color-numberNeutral);
   --color-reportsChartFill: var(--color-reportsNumberPositive);
 
-  --color-noteTagBackground: var(--palette-purple125);
-  --color-noteTagBackgroundHover: var(--palette-purple150);
-  --color-noteTagDefault: var(--palette-purple125);
+  --color-noteTagBackground: var(--mobills-blue100);
+  --color-noteTagBackgroundHover: var(--mobills-blue200);
+  --color-noteTagDefault: var(--mobills-blue100);
   --color-noteTagText: var(--palette-black);
 
   --color-budgetCurrentMonth: var(--color-tableBackground);
@@ -229,7 +241,7 @@
   --color-budgetHeaderCurrentMonth: var(--color-budgetOtherMonth);
   --color-budgetHeaderOtherMonth: var(--palette-gray80);
 
-  --color-floatingActionBarBackground: var(--palette-purple400);
+  --color-floatingActionBarBackground: var(--mobills-blue500);
   --color-floatingActionBarBorder: var(--color-floatingActionBarBackground);
   --color-floatingActionBarText: var(--palette-navy50);
 

@@ -30,6 +30,7 @@ import { EnableBankingCallback } from './EnableBankingCallback';
 import { FeatureErrorFallback } from './FeatureErrorFallback';
 import { GlobalKeys } from './GlobalKeys';
 import { MobileBankSyncAccountEditPage } from './mobile/banksync/MobileBankSyncAccountEditPage';
+import { HomePage } from './mobile/home/HomePage';
 import { MobileNavTabs } from './mobile/MobileNavTabs';
 import { TransactionEdit } from './mobile/transactions/TransactionEdit';
 import { Notifications } from './Notifications';
@@ -252,12 +253,29 @@ export function FinancesApp() {
                       isAccountsFetching || !accounts ? (
                         <LoadingIndicator />
                       ) : accounts.length > 0 ? (
-                        <Navigate to="/budget" replace />
+                        <Navigate
+                          to={isNarrowWidth ? '/home' : '/budget'}
+                          replace
+                        />
                       ) : (
                         // If there are no accounts, we want to redirect the user to
                         // the All Accounts screen which will prompt them to add an account
                         <Navigate to="/accounts" replace />
                       )
+                    }
+                  />
+
+                  <Route
+                    path="/home"
+                    element={
+                      <ErrorBoundary
+                        FallbackComponent={FeatureErrorFallback}
+                        resetKeys={[location.pathname]}
+                      >
+                        <WideNotSupported redirectTo="/budget">
+                          <HomePage />
+                        </WideNotSupported>
+                      </ErrorBoundary>
                     }
                   />
 
@@ -418,6 +436,7 @@ export function FinancesApp() {
               </View>
 
               <Routes>
+                <Route path="/home" element={<MobileNavTabs />} />
                 <Route path="/budget" element={<MobileNavTabs />} />
                 <Route path="/accounts" element={<MobileNavTabs />} />
                 <Route path="/settings" element={<MobileNavTabs />} />

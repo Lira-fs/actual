@@ -66,7 +66,8 @@ export const setI18NextLanguage = (language: string | null) => {
   const defaultLanguages = Array.isArray(navigator.languages)
     ? navigator.languages
     : [navigator.language || 'en'];
-  const languagesToTry = language ? [language] : defaultLanguages;
+  // Default to pt-BR when the user has not picked a language explicitly.
+  const languagesToTry = language ? [language] : ['pt-BR', ...defaultLanguages];
 
   let resolved: string | undefined;
 

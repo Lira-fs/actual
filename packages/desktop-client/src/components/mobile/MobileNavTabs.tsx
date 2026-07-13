@@ -9,6 +9,9 @@ import {
   SvgAdd,
   SvgCog,
   SvgCreditCard,
+  SvgDotsHorizontalTriple,
+  SvgHome,
+  SvgList,
   SvgPiggyBank,
   SvgReports,
   SvgStoreFront,
@@ -25,10 +28,11 @@ import { useIsTestEnv } from '#hooks/useIsTestEnv';
 import { useScrollListener } from '#hooks/useScrollListener';
 import { useSyncServerStatus } from '#hooks/useSyncServerStatus';
 
-const COLUMN_COUNT = 3;
+const COLUMN_COUNT = 5;
+const ROW_COUNT = 3;
 const PILL_HEIGHT = 15;
 const ROW_HEIGHT = 70;
-const TOTAL_HEIGHT = ROW_HEIGHT * COLUMN_COUNT;
+const TOTAL_HEIGHT = ROW_HEIGHT * ROW_COUNT;
 const OPEN_FULL_Y = 1;
 const OPEN_DEFAULT_Y = TOTAL_HEIGHT - ROW_HEIGHT;
 const HIDDEN_Y = TOTAL_HEIGHT;
@@ -48,8 +52,9 @@ export function MobileNavTabs() {
   const navTabStyle = {
     flex: `1 1 ${100 / COLUMN_COUNT}%`,
     height: ROW_HEIGHT,
-    padding: 10,
+    padding: '10px 2px',
     maxWidth: `${100 / COLUMN_COUNT}%`,
+    fontSize: 11,
   };
 
   const [{ y }, api] = useSpring(() => ({ from: { y: OPEN_DEFAULT_Y } }), []);
@@ -92,19 +97,37 @@ export function MobileNavTabs() {
     [api, isTestEnv],
   );
 
-  const navTabs = [
+  // Linha principal (estilo Mobills): Início · Transações · [+] · Orçamento · Mais
+  // Demais abas ficam nas linhas ocultas, acessíveis pelo "Mais" ou arrastando.
+  const primaryTabs = [
     {
-      name: t('Budget'),
-      path: '/budget',
+      name: t('Home'),
+      path: '/home',
       style: navTabStyle,
-      Icon: SvgWallet,
+      Icon: SvgHome,
     },
     {
-      name: t('Transaction'),
-      path: '/transactions/new',
+      name: t('Transactions'),
+      path: '/accounts/all',
       style: navTabStyle,
-      Icon: SvgAdd,
+      Icon: SvgList,
     },
+  ].map(tab => (
+    <NavTab key={tab.path} onClick={() => openDefault()} {...tab} />
+  ));
+
+  const budgetTab = (
+    <NavTab
+      key="/budget"
+      name={t('Budget')}
+      path="/budget"
+      style={navTabStyle}
+      Icon={SvgWallet}
+      onClick={() => openDefault()}
+    />
+  );
+
+  const hiddenTabs = [
     {
       name: t('Accounts'),
       path: '/accounts',
@@ -154,6 +177,27 @@ export function MobileNavTabs() {
   ].map(tab => (
     <NavTab key={tab.path} onClick={() => openDefault()} {...tab} />
   ));
+
+  const navTabs = [
+    ...primaryTabs,
+    <AddTab
+      key="/transactions/new"
+      label={t('Add transaction')}
+      style={navTabStyle}
+      onClick={() => openDefault()}
+    />,
+    budgetTab,
+    <MoreTab
+      key="more"
+      name={t('More')}
+      style={navTabStyle}
+      isOpen={navbarState === 'open'}
+      onPress={() =>
+        navbarState === 'open' ? openDefault() : openFull({})
+      }
+    />,
+    ...hiddenTabs,
+  ];
 
   const bufferTabsCount = COLUMN_COUNT - (navTabs.length % COLUMN_COUNT);
   const bufferTabs = Array.from({ length: bufferTabsCount }).map((_, idx) => (
@@ -292,5 +336,88 @@ function NavTab({ Icon: TabIcon, name, path, style, onClick }: NavTabProps) {
       <TabIcon width={22} height={22} style={{ minHeight: '22px' }} />
       {name}
     </NavLink>
+  );
+}
+
+type AddTabProps = {
+  label: string;
+  style?: CSSProperties;
+  onClick: ComponentProps<typeof NavLink>['onClick'];
+};
+
+// Botão central destacado (estilo Mobills) para lançar nova transação.
+function AddTab({ label, style, onClick }: AddTabProps) {
+  return (
+    <NavLink
+      to="/transactions/new"
+      aria-label={label}
+      onClick={onClick}
+      style={{
+        ...styles.noTapHighlight,
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        textDecoration: 'none',
+        userSelect: 'none',
+        ...style,
+      }}
+    >
+      <div
+        style={{
+          width: 52,
+          height: 52,
+          borderRadius: 26,
+          marginTop: -18,
+          backgroundColor: theme.mobileNavItemSelected,
+          color: theme.mobileHeaderText,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 4px 10px rgba(0, 0, 0, 0.25)',
+        }}
+      >
+        <SvgAdd width={24} height={24} />
+      </div>
+    </NavLink>
+  );
+}
+
+type MoreTabProps = {
+  name: string;
+  style?: CSSProperties;
+  isOpen: boolean;
+  onPress: () => void;
+};
+
+// Abre/fecha a gaveta com as demais abas (Contas, Relatórios, etc.).
+function MoreTab({ name, style, isOpen, onPress }: MoreTabProps) {
+  return (
+    <button
+      type="button"
+      aria-expanded={isOpen}
+      onClick={onPress}
+      style={{
+        ...styles.noTapHighlight,
+        alignItems: 'center',
+        background: 'none',
+        border: 'none',
+        color: isOpen ? theme.mobileNavItemSelected : theme.mobileNavItem,
+        cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'column',
+        fontFamily: 'inherit',
+        textAlign: 'center',
+        userSelect: 'none',
+        ...style,
+      }}
+    >
+      <SvgDotsHorizontalTriple
+        width={22}
+        height={22}
+        style={{ minHeight: '22px' }}
+      />
+      {name}
+    </button>
   );
 }

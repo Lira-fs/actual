@@ -1,0 +1,68 @@
+name: Build Web (mobills)
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  CI: true
+
+on:
+  push:
+    branches:
+      - mobills
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-web-mobills
+  cancel-in-progress: true
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      # Node + yarn + deps + traduções (clona actualbudget/translations em
+      # packages/desktop-client/locale e remove idiomas <50% traduzidos)
+      - name: Set up environment
+        uses: ./.github/actions/setup
+
+      # Sobrepõe/complementa o pt-BR oficial com as chaves do fork
+      # (precisa rodar DEPOIS do download de traduções e ANTES do build,
+      # e o build usa --skip-translations para não sobrescrever o merge)
+      - name: Merge pt-BR overrides
+        run: |
+          if [ -f custom-locale/pt-BR.extra.json ]; then
+            node -e '
+              const fs = require("fs");
+              const base = JSON.parse(fs.readFileSync("packages/desktop-client/locale/pt-BR.json", "utf8"));
+              const extra = JSON.parse(fs.readFileSync("custom-locale/pt-BR.extra.json", "utf8"));
+              const merged = { ...base, ...extra };
+              fs.writeFileSync("packages/desktop-client/locale/pt-BR.json", JSON.stringify(merged, null, 2));
+              console.log(`pt-BR: ${Object.keys(base).length} chaves base + ${Object.keys(extra).length} overrides = ${Object.keys(merged).length}`);
+            '
+          else
+            echo "custom-locale/pt-BR.extra.json não existe — pulando merge"
+          fi
+
+      - name: Build Web
+        run: yarn build:browser --skip-translations
+
+      - name: Package tarball
+        run: tar -czf actual-web-mobills.tar.gz -C packages/desktop-client/build .
+
+      - name: Publish to fixed release (mobills-latest)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete mobills-latest --yes --cleanup-tag || true
+          gh release create mobills-latest actual-web-mobills.tar.gz \
+            --title "Actual Web — build mobills" \
+            --notes "Build automático da branch mobills — commit ${GITHUB_SHA}" \
+            --latest=false
