@@ -1,16 +1,4 @@
 :root {
-  /* Paleta Mobills — azul royal usado como cor de marca no tema claro */
-  --mobills-blue50: #eef2ff;
-  --mobills-blue100: #dfe7ff;
-  --mobills-blue200: #b9c8ff;
-  --mobills-blue300: #8ba1ff;
-  --mobills-blue400: #5c7cfe;
-  --mobills-blue500: #3d5afe;
-  --mobills-blue600: #2a44e8;
-  --mobills-blue700: #1f35c4;
-  --mobills-blue800: #16279b;
-  --mobills-blue900: #101c6e;
-
   --color-pageBackground: var(--palette-navy100);
   --color-pageBackgroundModalActive: var(--palette-navy200);
   --color-pageBackgroundTopLeft: var(--palette-navy100);
