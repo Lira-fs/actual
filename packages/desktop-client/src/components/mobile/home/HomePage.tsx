@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { ReactNode } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { Button } from '@actual-app/components/button';
 import { SvgAdd } from '@actual-app/components/icons/v1';
@@ -10,6 +11,7 @@ import { theme } from '@actual-app/components/theme';
 import { View } from '@actual-app/components/view';
 import * as monthUtils from '@actual-app/core/shared/months';
 import { q } from '@actual-app/core/shared/query';
+import { getScheduledAmount } from '@actual-app/core/shared/schedules';
 import { Cell, Pie, PieChart } from 'recharts';
 
 import { MOBILE_NAV_HEIGHT } from '#components/mobile/MobileNavTabs';
@@ -18,6 +20,7 @@ import { MobilePageHeader, Page } from '#components/Page';
 import { CellValue, CellValueText } from '#components/spreadsheet/CellValue';
 import { useFormat } from '#hooks/useFormat';
 import { useNavigate } from '#hooks/useNavigate';
+import { useSchedules } from '#hooks/useSchedules';
 import { aqlQuery } from '#queries/aqlQuery';
 import * as bindings from '#spreadsheet/bindings';
 
@@ -127,6 +130,30 @@ function useHomeData() {
   return { income, expenses, slices, recent, loading, reload: load };
 }
 
+// "A pagar / a receber" do mês vem das transações agendadas (schedules)
+// ainda não concluídas cuja próxima data cai no mês corrente.
+function useUpcoming() {
+  const query = useMemo(() => q('schedules').select('*'), []);
+  const { schedules } = useSchedules({ query });
+  const month = monthUtils.currentMonth();
+
+  return useMemo(() => {
+    let toReceive = 0;
+    let toPay = 0;
+    for (const schedule of schedules) {
+      if (schedule.completed || !schedule.next_date) continue;
+      if (!schedule.next_date.startsWith(month)) continue;
+      const amount = getScheduledAmount(schedule._amount);
+      if (amount > 0) {
+        toReceive += amount;
+      } else {
+        toPay += amount;
+      }
+    }
+    return { toReceive, toPay };
+  }, [schedules, month]);
+}
+
 function SummaryCard({
   label,
   amount,
@@ -182,7 +209,7 @@ function CategoryDonut({ slices }: { slices: CategorySlice[] }) {
   if (data.length === 0) {
     return (
       <Text style={{ color: theme.pageTextLight, padding: 10 }}>
-        {t('No transactions yet')}
+        <Trans>No transactions yet</Trans>
       </Text>
     );
   }
@@ -237,7 +264,11 @@ function CategoryDonut({ slices }: { slices: CategorySlice[] }) {
   );
 }
 
-function RecentTransactionRow({ transaction }: { transaction: RecentTransaction }) {
+function RecentTransactionRow({
+  transaction,
+}: {
+  transaction: RecentTransaction;
+}) {
   const { t } = useTranslation();
   const format = useFormat();
   const isExpense = transaction.amount < 0;
@@ -292,8 +323,8 @@ function SectionCard({
   children,
 }: {
   title: string;
-  action?: React.ReactNode;
-  children: React.ReactNode;
+  action?: ReactNode;
+  children: ReactNode;
 }) {
   return (
     <View
@@ -326,6 +357,7 @@ export function HomePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { income, expenses, slices, recent, loading, reload } = useHomeData();
+  const { toReceive, toPay } = useUpcoming();
 
   return (
     <Page
@@ -357,9 +389,9 @@ export function HomePage() {
                 marginBottom: 4,
               }}
             >
-              {t('Current balance')}
+              <Trans>Current balance</Trans>
             </Text>
-            <CellValue
+            <CellValue<'account', 'onbudget-accounts-balance'>
               binding={bindings.onBudgetAccountBalance()}
               type="financial"
             >
@@ -390,6 +422,20 @@ export function HomePage() {
             />
           </View>
 
+          {/* A receber × a pagar (agendadas do mês) */}
+          <View style={{ flexDirection: 'row', gap: 12 }}>
+            <SummaryCard
+              label={t('To receive')}
+              amount={toReceive}
+              color={theme.noticeText}
+            />
+            <SummaryCard
+              label={t('To pay')}
+              amount={toPay}
+              color={theme.errorText}
+            />
+          </View>
+
           {/* Gastos por categoria */}
           <SectionCard title={t('Spending by category')}>
             {loading ? (
@@ -408,13 +454,13 @@ export function HomePage() {
                 onPress={() => navigate('/accounts/all')}
                 style={{ color: theme.pageTextLink, fontSize: 13 }}
               >
-                {t('See all')}
+                <Trans>See all</Trans>
               </Button>
             }
           >
             {recent.length === 0 ? (
               <Text style={{ color: theme.pageTextLight, padding: 10 }}>
-                {t('No transactions yet')}
+                <Trans>No transactions yet</Trans>
               </Text>
             ) : (
               recent.map(transaction => (

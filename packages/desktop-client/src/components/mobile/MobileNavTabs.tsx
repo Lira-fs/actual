@@ -192,9 +192,7 @@ export function MobileNavTabs() {
       name={t('More')}
       style={navTabStyle}
       isOpen={navbarState === 'open'}
-      onPress={() =>
-        navbarState === 'open' ? openDefault() : openFull({})
-      }
+      onPress={() => (navbarState === 'open' ? openDefault() : openFull({}))}
     />,
     ...hiddenTabs,
   ];
